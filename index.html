@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="COSMOS project page for networked ISAC enabled low-altitude target recognition.">
+    <title>COSMOS | Networked ISAC Target Recognition</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <nav class="nav-shell" aria-label="Primary">
+        <a class="brand" href="#top" aria-label="COSMOS home">
+          <span class="brand-mark">C</span>
+          <span>COSMOS</span>
+        </a>
+        <div class="nav-links">
+          <a href="#system-model">System Model</a>
+          <a href="#features">Features</a>
+          <a href="#network">Network</a>
+          <a href="#dataset">Dataset</a>
+          <a href="#results">Results</a>
+          <a href="#conclusion">Conclusion</a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero section-shell" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy reveal">
+          <h1 id="hero-title" class="paper-title">COSMOS: Networked ISAC Enabled Target Recognition Towards Low-Altitude Economy</h1>
+          <div class="author-block" aria-label="Authors">
+            <p class="author-line">
+              <span>Hongliang Luo<sup>1</sup></span>
+              <span>Chuanbin Zhao<sup>1</sup></span>
+              <span>Boxuan Sun<sup>1</sup></span>
+              <span>Zhonghua Chu<sup>1</sup></span>
+              <span>Shengjie Quan<sup>1</sup></span>
+            </p>
+            <p class="author-line author-line-secondary">
+              <span>Guangyi Liu<sup>2</sup></span>
+              <span>Feifei Gao<sup>1</sup></span>
+            </p>
+          </div>
+          <p class="affiliation-line">
+            <span><sup>1</sup>Tsinghua University</span>
+            <span><sup>2</sup>China Mobile Research Institute</span>
+          </p>
+          <div class="abstract-card" aria-label="Abstract">
+            <span>ABSTRACT</span>
+            <p>In this paper, we propose a low-altitude target (LAT) recognition scheme based on multi-base station (BS) collaboration and multi-scale feature fusion for integrated sensing and communications (ISAC) network. We formulate the motion equations, echo channels, and echo signals for unmanned aerial vehicle (UAV), bird, vehicle, and pedestrian under multi-BS collaborative monitoring scenario. Then we extract the velocity-resolution-preferred time-frequency spectrum, time-resolution-preferred time-frequency spectrum, and velocity-transfer time-frequency spectrum observed by each BS from echo signals. We collectively refer to these three types of time-frequency spectrum as the multi-scale feature of the LAT. Next, we design a multi-BS and multi-scale feature fusion enabled LAT recognition network with Swin Transformer, which employs the visualized images of multi-scale feature to jointly recognize the target through deep feature extraction, intra-BS feature interaction, inter-BS feature interaction, and target recognition output. We generate a massive echo signal dataset comprising 1,440,000 samples for LAT recognition within ISAC network. This dataset can serve as a public benchmark to evaluate our proposed scheme and facilitate future research. Simulation results demonstrate that the proposed scheme realizes high recognition accuracy and robust unseen-subtype generalization, confirming the effectiveness of multi-scale feature fusion and the additional gains brought by multi-BS collaboration.</p>
+          </div>
+          <div class="highlight-grid" aria-label="Contribution highlights">
+            <article>
+              <h2>Multi-BS scenario</h2>
+              <p>Networked ISAC sensing with three cooperative base stations.</p>
+            </article>
+            <article>
+              <h2>Multi-scale features</h2>
+              <p>VRP-TF, TRP-TF, and VT-TF capture complementary motion cues.</p>
+            </article>
+            <article>
+              <h2>Hierarchical fusion</h2>
+              <p>Shared Swin-B with intra-BS and inter-BS feature interaction.</p>
+            </article>
+            <article>
+              <h2>Large-scale dataset</h2>
+              <p>1,440,000 samples across 40 target subtypes and six SNR settings.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="system-band" id="system-model" aria-labelledby="system-model-title">
+        <div class="section-shell system-section">
+          <div class="stacked-heading reveal">
+            <h2 id="system-model-title">System Model</h2>
+            <p>The recognition task is built on a networked ISAC sensing cell, where three BSs observe low-altitude targets from complementary geometric views.</p>
+          </div>
+          <div class="system-figure-grid reveal">
+            <figure class="system-figure">
+              <img src="assets/fig01_lat_scenario.png" alt="LAT recognition scenario in an ISAC network with three base stations and four target categories">
+              <figcaption><strong>Fig. 1.</strong> LAT recognition scenario in ISAC network.</figcaption>
+            </figure>
+            <figure class="system-figure">
+              <img src="assets/fig02_aerial_multibs.png" alt="Aerial view of multi-BS cooperative sensing scenario with BS-A, BS-B, BS-C and target coordinates">
+              <figcaption><strong>Fig. 2.</strong> Aerial view of multi-BS cooperative sensing scenario.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-shell feature-section" id="features" aria-labelledby="features-title">
+        <div class="stacked-heading reveal">
+          <h2 id="features-title">Multi-Scale Features</h2>
+        </div>
+
+        <div class="feature-stack reveal" aria-label="Multi-scale time-frequency feature types">
+          <article class="feature-row">
+            <div class="feature-copy">
+              <span class="feature-code">VRP-TF spectrum</span>
+              <h3>Velocity-Resolution-Preferred Time-Frequency Spectrum</h3>
+              <p>VRP-TF is obtained by using a long STFT window, which provides high velocity resolution and better observation of LAT velocity details. The resulting spectra show class-dependent horizontal stripe patterns.</p>
+            </div>
+            <figure class="feature-figure">
+              <img src="assets/fig06_vrp.png" alt="Velocity-Resolution-Preferred Time-Frequency Spectrum examples for UAV, bird, vehicle, and pedestrian">
+            </figure>
+          </article>
+
+          <article class="feature-row">
+            <div class="feature-copy">
+              <span class="feature-code">TRP-TF spectrum</span>
+              <h3>Time-Resolution-Preferred Time-Frequency Spectrum</h3>
+              <p>TRP-TF is obtained by using a short STFT window, which preserves high time resolution. It displays periodic envelopes caused by the periodic micro-motions of different LAT categories.</p>
+            </div>
+            <figure class="feature-figure">
+              <img src="assets/fig07_trp.png" alt="Time-Resolution-Preferred Time-Frequency Spectrum examples for UAV, bird, vehicle, and pedestrian">
+            </figure>
+          </article>
+
+          <article class="feature-row">
+            <div class="feature-copy">
+              <span class="feature-code">VT-TF spectrum</span>
+              <h3>Velocity-Transfer Time-Frequency Spectrum</h3>
+              <p>VT-TF replaces the velocity-FFT calculation with matched filtering and is composed of velocity component transition amounts. It reflects micro-motion periodicity while retaining more velocity distribution details.</p>
+            </div>
+            <figure class="feature-figure">
+              <img src="assets/fig08_vt.png" alt="Velocity-Transfer Time-Frequency Spectrum examples for UAV, bird, vehicle, and pedestrian">
+            </figure>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-shell method-section" id="network" aria-labelledby="network-title">
+        <div class="method-copy reveal">
+          <h2 id="network-title">Low-Altitude Target Recognition Network</h2>
+          <p>We design a multi-BS and multi-scale feature fusion enabled LAT recognition network with Swin Transformer, which employs the visualized images of multi-scale feature to jointly recognize the target through deep feature extraction, intra-BS feature interaction, inter-BS feature interaction, and target recognition output.</p>
+        </div>
+        <div class="method-card reveal">
+          <img src="assets/fig09_network.png" alt="Swin-B based intra-BS and inter-BS fusion network">
+        </div>
+      </section>
+
+      <section class="video-band" id="dataset" aria-labelledby="dataset-title">
+        <div class="section-shell">
+          <div class="stacked-heading reveal">
+            <h2 id="dataset-title">Large-Scale Dataset</h2>
+          </div>
+
+          <div class="dataset-stats reveal" aria-label="Dataset scale summary">
+            <article>
+              <strong>4</strong>
+              <span>target categories</span>
+            </article>
+            <article>
+              <strong>40</strong>
+              <span>target subtypes</span>
+            </article>
+            <article>
+              <strong>240,000</strong>
+              <span>motion models</span>
+            </article>
+            <article>
+              <strong>6</strong>
+              <span>SNR settings</span>
+            </article>
+            <article>
+              <strong>1,440,000</strong>
+              <span>echo signal samples</span>
+            </article>
+          </div>
+
+          <div class="video-gallery reveal" id="video-gallery" aria-label="All 40 target subtype videos"></div>
+        </div>
+      </section>
+
+      <section class="section-shell evidence-section" id="results" aria-labelledby="results-title">
+        <div class="results-copy reveal">
+          <h2 id="results-title">Experimental Results</h2>
+          <div class="result-block" aria-labelledby="experiment-settings-title">
+            <h3 id="experiment-settings-title" class="result-block-title">Experimental Settings</h3>
+            <div class="setting-cards" aria-label="Experimental setting summary">
+              <article>
+                <h4>Seen-subtype setting</h4>
+                <p>Training and testing samples share the same target subtypes, evaluating recognition accuracy under matched subtype distributions.</p>
+              </article>
+              <article>
+                <h4>Unseen-subtype setting</h4>
+                <p>Testing samples contain target subtypes excluded from training, evaluating generalization to new low-altitude target subtypes.</p>
+              </article>
+            </div>
+          </div>
+          <div class="result-block" aria-labelledby="performance-summary-title">
+            <h3 id="performance-summary-title" class="result-block-title">Performance Summary</h3>
+            <div class="result-metrics">
+              <div>
+                <strong>99.88%</strong>
+                <span>average accuracy on seen subtypes</span>
+              </div>
+              <div>
+                <strong>97.82%</strong>
+                <span>average accuracy on unseen subtypes</span>
+              </div>
+              <div>
+                <strong>96.08%</strong>
+                <span>accuracy at 3 dB on unseen subtypes</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="table-stack reveal" aria-label="Experimental result tables">
+          <section class="data-panel" aria-labelledby="seen-table-title">
+            <h3 id="seen-table-title">Seen-subtype recognition accuracy (%)</h3>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Scheme</th>
+                    <th>3 dB</th>
+                    <th>8 dB</th>
+                    <th>13 dB</th>
+                    <th>18 dB</th>
+                    <th>23 dB</th>
+                    <th>No noise</th>
+                    <th>Avg.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><th>BS-A: VRP</th><td>94.70</td><td>97.69</td><td>98.79</td><td>99.00</td><td>99.14</td><td>99.11</td><td>98.07</td></tr>
+                  <tr><th>BS-A: TRP</th><td>95.51</td><td>98.50</td><td>99.20</td><td>99.43</td><td>99.39</td><td>99.44</td><td>98.58</td></tr>
+                  <tr><th>BS-A: VT</th><td>93.01</td><td>97.63</td><td>98.88</td><td>99.16</td><td>99.30</td><td>99.32</td><td>97.88</td></tr>
+                  <tr class="row-soft"><th>BS-A: VRP+TRP+VT</th><td>96.52</td><td>98.88</td><td>99.42</td><td>99.57</td><td>99.63</td><td>99.65</td><td>98.94</td></tr>
+                  <tr><th>BS-B: VRP+TRP+VT</th><td>97.00</td><td>98.84</td><td>99.33</td><td>99.52</td><td>99.50</td><td>99.53</td><td>98.95</td></tr>
+                  <tr><th>BS-C: VRP+TRP+VT</th><td>96.75</td><td>98.81</td><td>99.38</td><td>99.52</td><td>99.53</td><td>99.55</td><td>98.92</td></tr>
+                  <tr class="row-strong"><th>BS-A/B/C: VRP+TRP+VT</th><td>99.52</td><td>99.91</td><td>99.95</td><td>99.97</td><td>99.97</td><td>99.97</td><td>99.88</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="data-panel" aria-labelledby="unseen-table-title">
+            <h3 id="unseen-table-title">Unseen-subtype recognition accuracy (%)</h3>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Scheme</th>
+                    <th>3 dB</th>
+                    <th>8 dB</th>
+                    <th>13 dB</th>
+                    <th>18 dB</th>
+                    <th>23 dB</th>
+                    <th>No noise</th>
+                    <th>Avg.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><th>BS-A: VRP</th><td>87.64</td><td>90.03</td><td>91.06</td><td>91.53</td><td>91.74</td><td>92.14</td><td>90.69</td></tr>
+                  <tr><th>BS-A: TRP</th><td>90.05</td><td>93.58</td><td>94.67</td><td>95.06</td><td>95.28</td><td>95.43</td><td>94.01</td></tr>
+                  <tr><th>BS-A: VT</th><td>87.56</td><td>92.73</td><td>94.33</td><td>94.95</td><td>95.31</td><td>95.51</td><td>93.40</td></tr>
+                  <tr class="row-soft"><th>BS-A: VRP+TRP+VT</th><td>91.65</td><td>94.44</td><td>95.69</td><td>96.10</td><td>96.24</td><td>96.36</td><td>95.08</td></tr>
+                  <tr><th>BS-B: VRP+TRP+VT</th><td>91.52</td><td>94.65</td><td>95.81</td><td>96.38</td><td>96.73</td><td>97.03</td><td>95.35</td></tr>
+                  <tr><th>BS-C: VRP+TRP+VT</th><td>92.26</td><td>94.62</td><td>95.83</td><td>96.24</td><td>96.42</td><td>96.47</td><td>95.31</td></tr>
+                  <tr class="row-strong"><th>BS-A/B/C: VRP+TRP+VT</th><td>96.08</td><td>97.74</td><td>98.19</td><td>98.26</td><td>98.30</td><td>98.34</td><td>97.82</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="data-panel" aria-labelledby="architecture-table-title">
+            <h3 id="architecture-table-title">Architecture comparison on unseen subtypes (%)</h3>
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Scheme</th>
+                    <th>3 dB</th>
+                    <th>8 dB</th>
+                    <th>13 dB</th>
+                    <th>18 dB</th>
+                    <th>23 dB</th>
+                    <th>No noise</th>
+                    <th>Avg.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="row-strong"><th>Proposed</th><td>96.08</td><td>97.74</td><td>98.19</td><td>98.26</td><td>98.30</td><td>98.34</td><td>97.82</td></tr>
+                  <tr><th>Swin-B + Mean Fusion</th><td>94.60</td><td>96.90</td><td>97.82</td><td>98.07</td><td>98.23</td><td>98.38</td><td>97.33</td></tr>
+                  <tr><th>ConvNeXt-B + Mean Fusion</th><td>93.90</td><td>95.73</td><td>96.65</td><td>97.14</td><td>97.45</td><td>97.69</td><td>96.43</td></tr>
+                  <tr><th>ViT-B/16 + Mean Fusion</th><td>93.65</td><td>95.39</td><td>95.86</td><td>96.18</td><td>96.26</td><td>96.41</td><td>95.62</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="section-shell conclusion-section" id="conclusion" aria-labelledby="conclusion-title">
+        <div class="conclusion-heading reveal">
+          <h2 id="conclusion-title">Conclusion</h2>
+        </div>
+        <div class="conclusion-grid">
+          <article class="conclusion-card reveal">
+            <h3>Key Contributions</h3>
+            <ul class="conclusion-list">
+              <li>Formulate the motion processes, echo channels, and echo signals for UAVs, birds, vehicles and pedestrians under multi-BS collaborative sensing scenario.</li>
+              <li>Propose a multi-scale time-frequency feature extraction algorithm for ISAC system, which extracts the VRP-TF, TRP-TF, and VT-TF of LAT as complementary multi-scale features.</li>
+              <li>Design a multi-BS and multi-scale feature fusion enabled LAT recognition network with Swin Transformer, which employs the visualized images of multi-scale feature to jointly recognize the target through deep feature extraction, intra-BS feature interaction, inter-BS feature interaction, and target recognition output.</li>
+              <li>Generate a massive echo signal dataset comprising 1,440,000 samples for LAT recognition within ISAC network.</li>
+            </ul>
+          </article>
+          <article class="conclusion-card conclusion-results reveal">
+            <h3>Key Experimental Results</h3>
+            <div class="conclusion-metrics" aria-label="Key experimental results">
+              <div>
+                <strong>99.88%</strong>
+                <span>average accuracy on seen subtypes</span>
+              </div>
+              <div>
+                <strong>97.82%</strong>
+                <span>average accuracy on unseen subtypes</span>
+              </div>
+              <div>
+                <strong>96.08%</strong>
+                <span>accuracy at 3 dB on unseen subtypes</span>
+              </div>
+            </div>
+            <p>Experimental results demonstrate that multi-scale feature fusion can enhance the accuracy of LAT recognition, and multi-base station fusion can further boost the accuracy of LAT recognition.</p>
+          </article>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="section-shell footer-inner">
+        <span>COSMOS</span>
+        <span>Networked ISAC Enabled Target Recognition Towards Low-Altitude Economy</span>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
